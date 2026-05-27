@@ -273,8 +273,8 @@ isa(S, T) :- isa(S, X), isa(X, T).
 % --- 2.4 RELATIONSHIPS (Connecting the Data) --- */
 % (Simplified from original file for brevity - keeping critical ones for constraints) */
 
-% r1: Patient includes Record */
-relationship(r1). hasParticipant(p1, medicalRecord). hasParticipant(q1, patient). hasRole(q1, includes).
+% r1: Patient hasRecord Record */
+relationship(r1). hasParticipant(p1, medicalRecord). hasParticipant(q1, patient). hasRole(q1, hasRecord).
 hasCustodian(p1, r1). hasCustodian(q1, r1).
 
 % r3: Patient is Enrolled In Hospital */
@@ -293,20 +293,20 @@ hasCustodian(p21, r21). hasCustodian(q21, r21).
 relationship(r26). hasParticipant(p26, medicalRecord). hasParticipant(q26, physician). hasRole(q26, creatorOf).
 hasCustodian(p26, r26). hasCustodian(q26, r26).
 
-% r37: Consultation hasRecord Record */
-relationship(r37). hasParticipant(p37, medicalRecord). hasParticipant(q37, consultation). hasRole(q37, hasRecord).
+% r37: Consultation includes Record */
+relationship(r37). hasParticipant(p37, medicalRecord). hasParticipant(q37, consultation). hasRole(q37, includes).
 hasCustodian(p37, r37). hasCustodian(q37, r37).
 
-% r75: Checkin hasRecord General Rec */
-relationship(r75). hasParticipant(p75, generalRec). hasParticipant(q75, checkin). hasRole(q75, hasRecord).
+% r75: Checkin includes General Rec */
+relationship(r75). hasParticipant(p75, generalRec). hasParticipant(q75, checkin). hasRole(q75, includes).
 hasCustodian(p75, r75). hasCustodian(q75, r75). hasDeclaredType(r75, r37).
 
-% r76: Checkin hasRecord Orhtopedic Rec */
-relationship(r76). hasParticipant(p76, orthopedicRec). hasParticipant(q76, checkin). hasRole(q76, hasRecord).
+% r76: Checkin includes Orhtopedic Rec */
+relationship(r76). hasParticipant(p76, orthopedicRec). hasParticipant(q76, checkin). hasRole(q76, includes).
 hasCustodian(p76, r76). hasCustodian(q76, r76). hasDeclaredType(r76, r37).
 
-% r77: Checkin hasRecord HIV Rec */
-relationship(r77). hasParticipant(p77, hIVRec). hasParticipant(q77, checkin). hasRole(q77, hasRecord).
+% r77: Checkin includes HIV Rec */
+relationship(r77). hasParticipant(p77, hIVRec). hasParticipant(q77, checkin). hasRole(q77, includes).
 hasCustodian(p77, r77). hasCustodian(q77, r77). hasDeclaredType(r77, r37).
 
 % r41: Supervision */
@@ -351,15 +351,15 @@ relationship(r63). hasParticipant(p63, charlieChaplin). hasParticipant(q63, cons
 relationship(r72). hasParticipant(p72, patientEve). hasParticipant(q72, consultT). hasRole(q72, involves). hasDeclaredType(r72, r2). hasCustodian(p72, r72). hasCustodian(q72, r72).
 relationship(r73). hasParticipant(p73, manoDelon). hasParticipant(q73, consultT). hasRole(q73, isPerformedBy). hasDeclaredType(r73, r4). hasCustodian(p73, r73). hasCustodian(q73, r73).
 % Records */
-relationship(r64). hasParticipant(p64, orthoRecJ). hasParticipant(q64, patientEve). hasRole(q64, includes). hasDeclaredType(r64, r1). hasCustodian(p64, r64). hasCustodian(q64, r64).
-relationship(r65). hasParticipant(p65, generalRecK). hasParticipant(q65, patientEve). hasRole(q65, includes). hasDeclaredType(r65, r1). hasCustodian(p65, r65). hasCustodian(q65, r65).
-relationship(r66). hasParticipant(p66, hivRecL). hasParticipant(q66, patientEve). hasRole(q66, includes). hasDeclaredType(r66, r1). hasCustodian(p66, r66). hasCustodian(q66, r66).
+relationship(r64). hasParticipant(p64, orthoRecJ). hasParticipant(q64, patientEve). hasRole(q64, hasRecord). hasDeclaredType(r64, r1). hasCustodian(p64, r64). hasCustodian(q64, r64).
+relationship(r65). hasParticipant(p65, generalRecK). hasParticipant(q65, patientEve). hasRole(q65, hasRecord). hasDeclaredType(r65, r1). hasCustodian(p65, r65). hasCustodian(q65, r65).
+relationship(r66). hasParticipant(p66, hivRecL). hasParticipant(q66, patientEve). hasRole(q66, hasRecord). hasDeclaredType(r66, r1). hasCustodian(p66, r66). hasCustodian(q66, r66).
 
 % Record-Consult Links */
-relationship(r67). hasParticipant(p67, generalRecK). hasParticipant(q67, consultG). hasRole(q67, hasRecord). hasDeclaredType(r67, r75). hasCustodian(p67, r67). hasCustodian(q67, r67).
-relationship(r68). hasParticipant(p68, orthoRecJ). hasParticipant(q68, consultH). hasRole(q68, hasRecord). hasDeclaredType(r68, r76). hasCustodian(p68, r68). hasCustodian(q68, r68).
-relationship(r69). hasParticipant(p69, hivRecL). hasParticipant(q69, consultI). hasRole(q69, hasRecord). hasDeclaredType(r69, r77). hasCustodian(p69, r69). hasCustodian(q69, r69).
-relationship(r74). hasParticipant(p74, generalRecT). hasParticipant(q74, consultT). hasRole(q74, hasRecord). hasDeclaredType(r74, r75). hasCustodian(p74, r74). hasCustodian(q74, r74).
+relationship(r67). hasParticipant(p67, generalRecK). hasParticipant(q67, consultG). hasRole(q67, includes). hasDeclaredType(r67, r75). hasCustodian(p67, r67). hasCustodian(q67, r67).
+relationship(r68). hasParticipant(p68, orthoRecJ). hasParticipant(q68, consultH). hasRole(q68, includes). hasDeclaredType(r68, r76). hasCustodian(p68, r68). hasCustodian(q68, r68).
+relationship(r69). hasParticipant(p69, hivRecL). hasParticipant(q69, consultI). hasRole(q69, includes). hasDeclaredType(r69, r77). hasCustodian(p69, r69). hasCustodian(q69, r69).
+relationship(r74). hasParticipant(p74, generalRecT). hasParticipant(q74, consultT). hasRole(q74, includes). hasDeclaredType(r74, r75). hasCustodian(p74, r74). hasCustodian(q74, r74).
 
 % Creator */
 relationship(r70). hasParticipant(p70, orthoRecJ). hasParticipant(q70, elonMusk). hasRole(q70, creatorOf). hasDeclaredType(r70, r26). hasCustodian(p70, r70). hasCustodian(q70, r70).
@@ -414,14 +414,14 @@ satisfies(default_add_denial, S, O) :- hasCustodian(S, _), hasCustodian(O, _). %
 % Grant 2: Consent */
 satisfies(has_consent_from_patient, S, O) :-
     isa(O, medicalRecord),
-    triple(P, includes, O), isa(P, patient),
+    triple(P, hasRecord, O), isa(P, patient),
     triple(S, hasConsentFrom, P).
 
 % Grant 6: Same Hospital */
 satisfies(same_hospital_with_patient, S, O) :-
     isa(S, physician),
     isa(O, medicalRecord),
-    triple(P, includes, O), isa(P, patient),
+    triple(P, hasRecord, O), isa(P, patient),
     triple(S, affiliatedWith, H), isa(H, hospital),
     triple(P, isEnrolledIn, H).
 
@@ -447,7 +447,7 @@ satisfies(performed_consult_same_hospital, S, O) :-
     isa(P, patient),
     isa(H, hospital),
     isa(C, consultation),
-    triple(C, hasRecord, O),
+    triple(C, includes, O),
     triple(S, affiliatedWith, H),
     triple(P, isEnrolledIn, H),
     triple(C, isPerformedBy, S),
@@ -456,10 +456,10 @@ satisfies(performed_consult_same_hospital, S, O) :-
 % Grant 4: Recent Consultation */
 satisfies(consult_includes_record_from_2024, S, O) :-
     isa(O, medicalRecord),
-    triple(P, includes, O), isa(P, patient),
+    triple(P, hasRecord, O), isa(P, patient),
     triple(C, isPerformedBy, S),
     triple(C, involves, P),
-    triple(C, hasRecord, O),
+    triple(C, includes, O),
     has_attribute(Attr, C, V), isa(Attr, consultationDate),
     greater_than_or_equal(V, 2024).
 
@@ -479,9 +479,9 @@ is_supervisor(X, Y) :- is_supervisor(X, Z), is_supervisor(Z, Y).
 satisfies(trainee_view_denied_if_old_consult, S, O) :-
     isa(S, trainee),
     isa(O, medicalRecord),
-    triple(P, includes, O), isa(P, patient),
+    triple(P, hasRecord, O), isa(P, patient),
     triple(C, involves, P),
-    triple(C, hasRecord, O),
+    triple(C, includes, O),
     has_attribute(AC, C, ConsultYear), isa(AC, consultationDate),
     has_attribute(AS, S, StartYear), isa(AS, startingDate),
     older_than_4_years(ConsultYear, StartYear).
@@ -496,7 +496,7 @@ satisfies(supervised_consult_chain_view, S, O) :-
     isa(CNEW, consultation),
     triple(CNEW, isPerformedBy, S),
     triple(CNEW, involves, P),
-    triple(CNEW, hasRecord, O),
+    triple(CNEW, includes, O),
     isa(SUP, physician),
     isa(C, consultation),
     is_supervisor(SUP, S),
@@ -514,7 +514,7 @@ satisfies(emergency_consultation, S, O) :-
     isa(O, medicalRecord),
     triple(C, isPerformedBy, S),
     triple(C, involves, P), isa(P, patient),
-    triple(C, hasRecord, O),
+    triple(C, includes, O),
     isa(A, ConsultationEmergencyMode),
     has_attribute(A, C, true).
 
