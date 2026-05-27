@@ -343,7 +343,7 @@ relationship(r58). hasParticipant(p58, patientEve). hasParticipant(q58, consultG
 relationship(r59). hasParticipant(p59, jamesMcGill). hasParticipant(q59, consultG). hasRole(q59, isPerformedBy). hasDeclaredType(r59, r4). hasCustodian(p59, r59). hasCustodian(q59, r59).
 % H (Bob) */
 relationship(r60). hasParticipant(p60, patientEve). hasParticipant(q60, consultH). hasRole(q60, involves). hasDeclaredType(r60, r2). hasCustodian(p60, r60). hasCustodian(q60, r60).
-relationship(r61). hasParticipant(p61, bobSmith). hasParticipant(q61, consultH). hasRole(q61, isPerformedBy). hasDeclaredType(r61, r4). hasCustodian(p61, r61). hasCustodian(q61, r61).
+relationship(r61). hasParticipant(p61, elonMusk). hasParticipant(q61, consultH). hasRole(q61, isPerformedBy). hasDeclaredType(r61, r4). hasCustodian(p61, r61). hasCustodian(q61, r61).
 % I (Charlie - old) */
 relationship(r62). hasParticipant(p62, patientEve). hasParticipant(q62, consultI). hasRole(q62, involves). hasDeclaredType(r62, r2). hasCustodian(p62, r62). hasCustodian(q62, r62).
 relationship(r63). hasParticipant(p63, charlieChaplin). hasParticipant(q63, consultI). hasRole(q63, isPerformedBy). hasDeclaredType(r63, r4). hasCustodian(p63, r63). hasCustodian(q63, r63).
