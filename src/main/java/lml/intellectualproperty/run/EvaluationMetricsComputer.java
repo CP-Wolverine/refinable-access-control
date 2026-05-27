@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class EvaluationMetricsComputer {
 
-    private static final String RESOURCE = "/New_EMR_SACMAT.txt";
+    private static final String RESOURCE = "/New_EMR.txt";
     private static final List<String> LEVELS = List.of("o0", "o1", "o2", "o3");
     private static final List<String> ACTIONS = List.of("view", "add");
 
