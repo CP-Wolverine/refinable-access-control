@@ -233,7 +233,7 @@ hasCustodian(consultEmergencyModeT, consultT). hasValue(consultEmergencyModeT, f
 hasCustodian(consultDateG, consultG). hasValue(consultDateG, 2025). hasDeclaredType(consultDateG, checkinDate).
 hasCustodian(consultDateH, consultH). hasValue(consultDateH, 2025). hasDeclaredType(consultDateH, checkinDate).
 hasCustodian(consultDateI, consultI). hasValue(consultDateI, 2020). hasDeclaredType(consultDateI, checkinDate).
-hasCustodian(consultDateT, consultT). hasValue(consultDateT, 2525). hasDeclaredType(consultDateT, checkinDate).
+hasCustodian(consultDateT, consultT). hasValue(consultDateT, 2025). hasDeclaredType(consultDateT, checkinDate).
 hasCustodian(startDateBob, bobSmith). hasValue(startDateBob, 2025). hasDeclaredType(startDateBob, employingDate).
 hasCustodian(startDateAlice, elonMusk). hasValue(startDateAlice, 2024). hasDeclaredType(startDateAlice, employingDate).
 hasCustodian(startDateCharlie, charlieChaplin). hasValue(startDateCharlie, 2023). hasDeclaredType(startDateCharlie, employingDate).
@@ -349,7 +349,7 @@ relationship(r62). hasParticipant(p62, patientEve). hasParticipant(q62, consultI
 relationship(r63). hasParticipant(p63, charlieChaplin). hasParticipant(q63, consultI). hasRole(q63, isPerformedBy). hasDeclaredType(r63, r4). hasCustodian(p63, r63). hasCustodian(q63, r63).
 % T (Manouchehr) */
 relationship(r72). hasParticipant(p72, patientEve). hasParticipant(q72, consultT). hasRole(q72, involves). hasDeclaredType(r72, r2). hasCustodian(p72, r72). hasCustodian(q72, r72).
-relationship(r73). hasParticipant(p73, manoDelon). hasParticipant(q73, consultT). hasRole(q73, isPerformedBy). hasDeclaredType(r73, r4). hasCustodian(p59, r73). hasCustodian(q73, r73).
+relationship(r73). hasParticipant(p73, manoDelon). hasParticipant(q73, consultT). hasRole(q73, isPerformedBy). hasDeclaredType(r73, r4). hasCustodian(p73, r73). hasCustodian(q73, r73).
 % Records */
 relationship(r64). hasParticipant(p64, orthoRecJ). hasParticipant(q64, patientEve). hasRole(q64, includes). hasDeclaredType(r64, r1). hasCustodian(p64, r64). hasCustodian(q64, r64).
 relationship(r65). hasParticipant(p65, generalRecK). hasParticipant(q65, patientEve). hasRole(q65, includes). hasDeclaredType(r65, r1). hasCustodian(p65, r65). hasCustodian(q65, r65).
@@ -396,7 +396,7 @@ declared_policy(grant_14, o1,grant, physician, medicalRecord, add,  emergency_co
 declared_policy(grant_3,     o2, grant, physician,         medicalRecord, view, supervisor_of_creator_can_view).
 declared_policy(deny_1,  o2, deny,  trainee,           medicalRecord, add,  always_true). %deny 1
 declared_policy(grant_11,    o2, grant, generalTrainee,    medicalRecord, add,  always_true). %11
-declared_policy(prohibit_8,  o2, deny,  trainee,           medicalRecord, view, trainee_view_denied_if_old_consult).
+declared_policy(deny_8,  o2, deny,  trainee,           medicalRecord, view, trainee_view_denied_if_old_consult).
 declared_policy(grant_9,     o2, grant, physician,         medicalRecord, view, supervised_consult_chain_view).
 
 % O3: Role Level */
@@ -435,6 +435,8 @@ satisfies(matching_specialty_same_ontology, S, O) :-
 
 % Helpers for Specialty */
 phys_specialty(S, orthopedic) :- isa(S, orthopedic).
+phys_specialty(S, general) :- isa(S, general).
+phys_specialty(S, hiv) :- isa(S, hiv).
 rec_category(O, orthopedic) :- isa(O, orthopedicRecord).
 rec_category(O, general)    :- isa(O, generalRecord).
 rec_category(O, hiv)        :- isa(O, hIVRecord).
@@ -468,10 +470,10 @@ greater_than_or_equal(2024, 2024).
 satisfies(supervisor_of_creator_can_view, S, O) :-
     isa(O, medicalRecord),
     triple(Creator, creatorOf, O),
-    is_superviser(S, Creator).
+    is_supervisor(S, Creator).
 
-is_superviser(X, Y) :- triple(X, supervises, Y).
-is_superviser(X, Y) :- is_superviser(X, Z), is_superviser(Z, Y).
+is_supervisor(X, Y) :- triple(X, supervises, Y).
+is_supervisor(X, Y) :- is_supervisor(X, Z), is_supervisor(Z, Y).
 
 % Prohibit 8: Trainee Old Consult */
 satisfies(trainee_view_denied_if_old_consult, S, O) :-
@@ -497,7 +499,7 @@ satisfies(supervised_consult_chain_view, S, O) :-
     triple(CNEW, hasRecord, O),
     isa(SUP, physician),
     isa(C, consultation),
-    is_superviser(SUP, S),
+    is_supervisor(SUP, S),
     triple(C, isPerformedBy, SUP),
     triple(C, involves, P).
 
