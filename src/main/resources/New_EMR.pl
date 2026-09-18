@@ -523,9 +523,10 @@ satisfies(emergency_consultation, S, O) :-
 % METRICS LAYER (no aggregates; count in Java)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Decide level(s): any level with at least one most-specialized applicable rule
+% Deciding level: a surviving level with at least one most-specialized rule.
 deciding_level(S,O,A,L) :-
-  most_specialized_applicable_rule_at_level(L, _, S, O, A).
+  most_specialized_applicable_rule_at_level(L, _, S, O, A),
+  not is_preempted(L, S, O, A).
 
 % Applicable rules at a given level (A0)
 applicable_at_level(S,O,A,L,RuleId,Pol) :-

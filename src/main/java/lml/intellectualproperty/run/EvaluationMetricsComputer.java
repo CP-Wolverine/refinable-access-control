@@ -9,15 +9,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- * Workload-based evaluation for the SACMAT EMR artifact.
+ * Diagnostic runner for the legacy EMR artifact.
  * <p>
- * Requires that New_EMR_SACMAT.txt includes the "METRICS LAYER" predicates:
+ * Requires that New_EMR.pl includes the "METRICS LAYER" predicates:
  * deciding_level/4, applicable_at_level/6, winner_at_level/5, shadowed_at_level/5,
  * preempted_level/4, true_conflict/3.
+ * The metrics printed here are not final manuscript evidence.
  */
 public class EvaluationMetricsComputer {
 
-    private static final String RESOURCE = "/New_EMR.txt";
+    private static final String RESOURCE = "/New_EMR.pl";
     private static final List<String> LEVELS = List.of("o0", "o1", "o2", "o3");
     private static final List<String> ACTIONS = List.of("view", "add");
 
@@ -48,8 +49,7 @@ public class EvaluationMetricsComputer {
     }
 
     public static void main(String[] args) throws Exception {
-        try {
-            // 0) File statistics (engineering-effort proxies)
+            // 0) File statistics (diagnostic only; not a complexity result)
             printResourceStats(RESOURCE);
 
             // 1) Build engine
@@ -59,33 +59,9 @@ public class EvaluationMetricsComputer {
             List<Request> workload = buildWorkload(SUBJECTS, RECORDS, ACTIONS);
             System.out.println("\nWorkload size = " + workload.size() + " requests");
 
-            // Workload-size scaling (N-scaling)
-            /*runWorkloadScaling(
-                    engine,
-                    workload,
-                    new int[]{8, 16, 32, 64}, // you can extend later
-                    1,  // warmupRounds
-                    5   // measuredRounds
-            );*/
-
-            runWorkloadScalingRepeated(
-                    engine,
-                    workload,
-                    new int[]{56, 224, 896, 3584, 14336, 57344, 100000},
-                    2,  // warmupRounds
-                    5   // measuredRounds
-            );
-
-            List<Request> applicableWorkload = filterApplicableRequests(engine, workload);
-            System.out.println("Applicable workload size = " + applicableWorkload.size());
-
-            runWorkloadScalingRepeated(
-                    engine,
-                    applicableWorkload,
-                    new int[]{56, 224, 896, 3584, 14336, 57344, 100000},
-                    2,
-                    5
-            );
+            System.out.println(
+                    "Repeated-request volume scaling is disabled: repeating the same " +
+                    "56 requests does not scale model or policy input complexity.");
 
             // 3) Run workload and collect metrics
             List<Double> latMicros = new ArrayList<>(workload.size());
@@ -145,7 +121,9 @@ public class EvaluationMetricsComputer {
                     sumShadowed.merge(L, (long) shadowed, Long::sum);
                     sumWinners.merge(L, (long) winners, Long::sum);
 
-                    requestExplSize += (long) applicable + shadowed;
+                    // Legacy proxy only. This avoids double-counting every shadowed rule
+                    // through both "applicable" and "shadowed".
+                    requestExplSize += (long) winners + shadowed;
 
                     if (applicable > 0) {
                         sumShadowRatio.merge(L, (double) shadowed / (double) applicable, Double::sum);
@@ -218,7 +196,7 @@ public class EvaluationMetricsComputer {
 
             // explanation size distribution
             Collections.sort(explSizes);
-            System.out.printf("%nExplanation-size proxy (Σ applicable + Σ shadowed + preemptedLevels): p50=%d p95=%d mean=%.2f max=%d%n",
+            System.out.printf("%nLegacy explanation-size proxy (Σ winners + Σ shadowed + preemptedLevels): p50=%d p95=%d mean=%.2f max=%d%n",
                     percentileInt(explSizes, 50),
                     percentileInt(explSizes, 95),
                     meanInt(explSizes),
@@ -226,10 +204,6 @@ public class EvaluationMetricsComputer {
             );
 
             System.out.println("=============================================\n");
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     private static List<Request> buildWorkload(List<String> subjects, List<String> objects, List<String> actions) {
@@ -281,8 +255,7 @@ public class EvaluationMetricsComputer {
     private static void printResourceStats(String resource) throws Exception {
         InputStream is = EvaluationMetricsComputer.class.getResourceAsStream(resource);
         if (is == null) {
-            System.out.println("Could not read resource for stats: " + resource);
-            return;
+            throw new IllegalArgumentException("Could not read resource for stats: " + resource);
         }
         long lines = 0;
         long declaredPolicies = 0;
@@ -485,7 +458,7 @@ public class EvaluationMetricsComputer {
             tmeanMeds.add(tmeanMed);
             p95Meds.add(p95Med);
 
-            System.out.printf("%d | %.2f | %.2f | %.2f | %.2f | %.1f%n",
+            System.out.printf("%d | %.2f | %.2f | %.2f | %.2f | %.2f | %.1f%n",
                     N, p50Med, p95Med, tmeanMed, meanMed, maxMed, thrMed);
         }
 
